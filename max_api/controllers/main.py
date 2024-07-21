@@ -41,8 +41,8 @@ class HttpController(http.Controller):
 
         try:
             model = request.env[model].sudo()
-            records = model.search(domain,limit=limit)
-            return werkzeug.wrappers.Response(json.dumps(records.read(fields)), status=200, content_type='application/json')
+            records = model.search(domain, limit=limit)
+            return werkzeug.wrappers.Response(str(records.read(fields)), status=200, content_type='application/json')
         except Exception as e:
             return werkzeug.wrappers.Response(str(e), status=500)
 
