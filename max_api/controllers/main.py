@@ -35,6 +35,8 @@ class HttpController(http.Controller):
         fields = kwargs.get('fields') or json_data.get('fields')
         limit = kwargs.get('limit') or json_data.get('limit')
 
+        external_id = kwargs.get('external_id') or json_data.get('external_id')
+
         if not model:
             return Response("Model is required", status=400)
 
@@ -62,6 +64,13 @@ class HttpController(http.Controller):
             limit = 1
 
         try:
+            if external_id:
+                model = request.env[model].sudo()
+                records = model.xmlid_to_res_id(external_id)
+                return {
+                    'data': records.read(fields)
+                }
+
             model = request.env[model].sudo()
             records = model.search(domain, limit=limit)
             # return werkzeug.wrappers.Response(str(records.read(fields)), status=200, content_type='application/json')
