@@ -66,7 +66,8 @@ class HttpController(http.Controller):
         try:
             if external_id:
                 model = request.env[model].sudo()
-                records = model.xmlid_to_res_id(external_id)
+                record_id = request.env['ir.model.data'].sudo().xmlid_to_res_id(external_id)
+                records = model.browse(record_id)
                 return {
                     'data': records.read(fields)
                 }
