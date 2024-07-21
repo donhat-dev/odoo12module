@@ -26,7 +26,9 @@ class HttpController(http.Controller):
         try:
             json_data = json.loads(request.httprequest.data)
         except:
-            return Response("Invalid JSON data", status=400)
+            return {
+                'error': 'Invalid JSON data'
+            }
         
         model = kwargs.get('model') or json_data.get('model')
         domain = kwargs.get('domain') or json_data.get('domain')
@@ -42,7 +44,9 @@ class HttpController(http.Controller):
             try:
                 domain = json.loads(domain)
             except:
-                return werkzeug.wrappers.Response("Fields must be a list of string", status=400)
+                return {
+                    'error': 'Domain must be a list of list'
+                }
 
         if not fields:
             fields = ['id', 'name']
@@ -50,7 +54,9 @@ class HttpController(http.Controller):
             try:
                 fields = json.loads(fields)
             except:
-                return werkzeug.wrappers.Response("Fields must be a list of string", status=400)
+                return {
+                    'error': 'Fields must be a list of string'
+                }
 
         if not limit:
             limit = 1
@@ -58,9 +64,14 @@ class HttpController(http.Controller):
         try:
             model = request.env[model].sudo()
             records = model.search(domain, limit=limit)
-            return werkzeug.wrappers.Response(str(records.read(fields)), status=200, content_type='application/json')
+            # return werkzeug.wrappers.Response(str(records.read(fields)), status=200, content_type='application/json')
+            return {
+                'data': records.read(fields)
+            }
         except Exception as e:
-            return werkzeug.wrappers.Response(str(e), status=500)
+            return {
+                'error': str(e)
+            }
 
 
 
