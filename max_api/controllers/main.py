@@ -32,9 +32,19 @@ class HttpController(http.Controller):
 
         if not domain:
             domain = []
+        if isinstance(domain, str):
+            try:
+                domain = json.loads(domain)
+            except:
+                return werkzeug.wrappers.Response("Fields must be a list of string", status=400)
 
         if not fields:
             fields = ['id', 'name']
+        if isinstance(fields, str):
+            try:
+                fields = json.loads(fields)
+            except:
+                return werkzeug.wrappers.Response("Fields must be a list of string", status=400)
 
         if not limit:
             limit = 1
