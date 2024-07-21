@@ -22,7 +22,12 @@ class HttpController(http.Controller):
 
     @http.route('/api/v1/search', type='http', auth='none', methods=['GET'], csrf=False)
     def search(self, **kwargs):
-        json_data = json.loads(request.httprequest.data)
+        json_data = {}
+        try:
+            json_data = json.loads(request.httprequest.data)
+        except:
+            return Response("Invalid JSON data", status=400)
+        
         model = kwargs.get('model') or json_data.get('model')
         domain = kwargs.get('domain') or json_data.get('domain')
         fields = kwargs.get('fields') or json_data.get('fields')
