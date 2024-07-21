@@ -38,7 +38,7 @@ class HttpController(http.Controller):
             limit = 10
 
         try:
-            model = request.env[model].sudo().with_user(SUPERUSER_ID)
+            model = request.env[model].sudo()
             records = model.search_read(domain, fields, limit=limit)
             return Response(records, status=200)
         except Exception as e:
