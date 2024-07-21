@@ -22,10 +22,11 @@ class HttpController(http.Controller):
 
     @http.route('/api/v1/search', type='http', auth='none', methods=['GET'], csrf=False)
     def search(self, **kwargs):
-        model = kwargs.get('model')
-        domain = kwargs.get('domain')
-        fields = kwargs.get('fields')
-        limit = kwargs.get('limit')
+        json_data = request.httprequest.json or {}
+        model = kwargs.get('model') or json_data.get('model')
+        domain = kwargs.get('domain') or json_data.get('domain')
+        fields = kwargs.get('fields') or json_data.get('fields')
+        limit = kwargs.get('limit') or json_data.get('limit')
 
         if not model:
             return Response("Model is required", status=400)
