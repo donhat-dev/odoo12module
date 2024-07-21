@@ -38,11 +38,11 @@ class HttpController(http.Controller):
             limit = 10
 
         try:
-            records = http.request.env[model].search_read(domain, fields, limit=limit)
+            records = http.request.env[model].with_user(SUPERUSER_ID).search_read(domain, fields, limit=limit)
             return Response(records, status=200)
         except Exception as e:
             return Response(str(e), status=400)
-            
+
 
 
 # from odoo.addons.component.core import WorkContext, _get_addon_name
