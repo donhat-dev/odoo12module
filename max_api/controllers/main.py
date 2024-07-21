@@ -20,7 +20,7 @@ class HttpController(http.Controller):
     def health(self, **kwargs):
         return Response("OK", status=200)
 
-    @http.route('/api/v1/search', type='http', auth='none', methods=['GET'], csrf=False)
+    @http.route('/api/v1/search', type='json', auth='none', methods=['GET'], csrf=False)
     def search(self, **kwargs):
         json_data = {}
         try:
