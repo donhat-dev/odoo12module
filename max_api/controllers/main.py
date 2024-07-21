@@ -11,6 +11,7 @@ from odoo.http import Controller, ControllerType, Response, request, \
 
 from odoo import _, fields, http, tools, SUPERUSER_ID
 import json
+import werkzeug
 
 class HttpController(http.Controller):
     
@@ -33,17 +34,17 @@ class HttpController(http.Controller):
             domain = []
 
         if not fields:
-            fields = []
+            fields = ['id', 'name']
 
         if not limit:
-            limit = 10
+            limit = 1
 
         try:
             model = request.env[model].sudo()
-            records = model.search_read(domain, fields, limit=limit)
-            return records
+            records = model.search(domain,limit=limit)
+            return werkzeug.wrappers.Response(json.dumps(records.read(fields)), status=200, content_type='application/json')
         except Exception as e:
-            return Response(str(e), status=400)
+            return werkzeug.wrappers.Response(str(e), status=500)
 
 
 
