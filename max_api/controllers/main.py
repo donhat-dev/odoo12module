@@ -10,6 +10,7 @@ from odoo.http import Controller, ControllerType, Response, request, \
     controllers_per_module
 
 from odoo import _, fields, http, tools, SUPERUSER_ID
+import json
 
 class HttpController(http.Controller):
     
@@ -40,7 +41,7 @@ class HttpController(http.Controller):
         try:
             model = request.env[model].sudo()
             records = model.search(domain, limit=limit)
-            return Response({'data': records.read(fields)}, status=200)
+            return Response(json.dumps(records.read(fields)), status=200)
         except Exception as e:
             return Response(str(e), status=400)
 
