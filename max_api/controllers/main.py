@@ -39,8 +39,8 @@ class HttpController(http.Controller):
 
         try:
             model = request.env[model].sudo()
-            records = model.search_read(domain, fields, limit=limit)
-            return Response(records, status=200)
+            records = model.search(domain, limit=limit)
+            return request.make_json_response({'data': records.read(fields)})
         except Exception as e:
             return Response(str(e), status=400)
 
